@@ -23,7 +23,7 @@
   <div class="scene" id="welcome">
     <article class="content">
 
- 
+
 
       <div class="row">
         <div class=""col-12>
@@ -35,6 +35,20 @@
             <img class="hidesm" src="assets/images/intro_wedding.jpg" alt="Intro Gallery Dining Sample Pictures">
           </div>
           <h1>Book a Room</h1>
+          <h2>Welcome Messages</h2>
+
+          <!-- Display singular message if available -->
+          <div *ngIf="singularMessage">
+            <p><strong>Singular Message:</strong> {{ singularMessage }}</p>
+          </div>
+
+          <!-- Display all messages if messagesArray is available -->
+          <ul *ngIf="messagesArray && messagesArray.length > 0">
+            <li *ngFor="let message of messagesArray">
+              {{ message }}
+            </li>
+          </ul>
+
           <form class="form-horizontal" [formGroup]="roomsearch"
           (ngSubmit)="onSubmit(roomsearch)">
 
@@ -58,11 +72,47 @@
               </div>
               </form>
 
-        
+
         </div>
       </div>
 
       <h1>Available Rooms</h1>
+
+      <div class="row" *ngIf="rooms">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+              <tr *ngFor="let room of rooms">
+                <td>
+                  <img src="assets/images/intro_room.jpg" alt="Intro Gallery Room Sample Pictures">
+                </td>
+                <td>
+                  <strong>Room #: {{room.roomNumber}}</strong><br/>
+                  <strong>Price: ${{room.price}}</strong>
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-primary" (click)="reserveRoom(room.id)">Reserve</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Welcome Messages Block Here -->
+      <h2>Welcome Messages</h2>
+
+      <div *ngIf="singularMessage">
+        <p><strong>Singular Message:</strong> {{ singularMessage }}</p>
+      </div>
+
+      <ul *ngIf="messagesArray && messagesArray.length > 0">
+        <li *ngFor="let message of messagesArray">
+          {{ message }}
+        </li>
+      </ul>
 
       <div class="row" *ngIf="rooms">
         <div class="col-12">

@@ -4,103 +4,16 @@ import {HttpClient, HttpResponse,HttpHeaders} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import {map} from "rxjs/operators";
 
-
-
-
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent implements OnInit{
-
-  constructor(private httpClient:HttpClient){}
-
-  private baseURL:string='http://localhost:8080';
-
-  private getUrl:string = this.baseURL + '/room/reservation/v1/';
-  private postUrl:string = this.baseURL + '/room/reservation/v1';
-  public submitted!:boolean;
-  roomsearch! : FormGroup;
-  rooms! : Room[];
-  request!:ReserveRoomRequest;
-  currentCheckInVal!:string;
-  currentCheckOutVal!:string;
-
-    ngOnInit(){
-      this.roomsearch= new FormGroup({
-        checkin: new FormControl(' '),
-        checkout: new FormControl(' ')
-      });
-
- //     this.rooms=ROOMS;
-
-
-    const roomsearchValueChanges$ = this.roomsearch.valueChanges;
-
-    // subscribe to the stream
-    roomsearchValueChanges$.subscribe(x => {
-      this.currentCheckInVal = x.checkin;
-      this.currentCheckOutVal = x.checkout;
-    });
-  }
-
-    onSubmit({value,valid}:{value:Roomsearch,valid:boolean}){
-      this.getAll().subscribe(
-
-        rooms => {console.log(Object.values(rooms)[0]);this.rooms=<Room[]>Object.values(rooms)[0]; }
-
-
-      );
-    }
-    reserveRoom(value:string){
-      this.request = new ReserveRoomRequest(value, this.currentCheckInVal, this.currentCheckOutVal);
-
-      this.createReservation(this.request);
-    }
-    createReservation(body:ReserveRoomRequest) {
-      let bodyString = JSON.stringify(body); // Stringify payload
-      let headers = new Headers({'Content-Type': 'application/json'}); // ... Set content type to JSON
-     // let options = new RequestOptions({headers: headers}); // Create a request option
-
-     const options = {
-      headers: new HttpHeaders().append('key', 'value'),
-
-    }
-
-      this.httpClient.post(this.postUrl, body, options)
-        .subscribe(res => console.log(res));
-    }
-
-  /*mapRoom(response:HttpResponse<any>): Room[]{
-    return response.body;
-  }*/
-
-    getAll(): Observable<any> {
-
-
-       return this.httpClient.get(this.baseURL + '/room/reservation/v1?checkin='+ this.currentCheckInVal + '&checkout='+this.currentCheckOutVal, {responseType: 'json'});
-    }
-
-  }
-
-
-
 export interface Roomsearch{
     checkin:string;
     checkout:string;
   }
-
-
-
 
 export interface Room{
   id:string;
   roomNumber:string;
   price:string;
   links:string;
-
 }
 export class ReserveRoomRequest {
   roomId:string;
@@ -115,6 +28,66 @@ export class ReserveRoomRequest {
     this.checkin = checkin;
     this.checkout = checkout;
   }
+}
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  title = 'Landon Hotel App';
+  singularMessage: string = ''; //Singular message variable
+  messagesArray: string[] = []; //Message Array
+
+  roomsearch!: FormGroup; // Add FormGroup for the search form
+  rooms: any[] = []; // Placeholder for room data
+
+  constructor(private http: HttpClient) {}
+
+  //Method to fetch messages
+  getLocalizedMessages(): Observable<any> {
+    const url = '/api/messages'; //Endpoint for MessageController
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        return response; //backend response
+      })
+    );
+  }
+
+  ngOnInit(): void {
+    // Initialize the roomsearch form
+    this.roomsearch = new FormGroup({
+      checkin: new FormControl(''),
+      checkout: new FormControl('')
+    });
+
+    this.getLocalizedMessages().subscribe(
+      //gets messages when initialized
+        (data) => {
+          //JSON object is send
+          this.singularMessage = data['English']; //English message is assigned to singular Message
+          this.messagesArray = Object.values(data); //Message conversion to array
+        },
+        (error) => {
+          console.error('Error acquiring local message: ', error)
+        }
+      );
+  }
+
+  // Method to handle form submission
+  onSubmit(searchForm: FormGroup): void {
+    const formValues = searchForm.value;
+    console.log('Form submitted:', formValues);
+    // Add HTTP request to fetch room data if needed
+  }
+
+  // Placeholder method for reserving a room
+  reserveRoom(roomId: string): void {
+    console.log(`Reserving room with ID: ${roomId}`);
+    // Add logic to reserve the room (e.g., HTTP request)
+  }
+
 }
 
 /*
