@@ -41,7 +41,6 @@
           <div *ngIf="singularMessage">
             <p><strong>Singular Message:</strong> {{ singularMessage }}</p>
           </div>
-
           <!-- Display all messages if messagesArray is available -->
           <ul *ngIf="messagesArray && messagesArray.length > 0">
             <li *ngFor="let message of messagesArray">
@@ -77,22 +76,27 @@
       </div>
 
       <h1>Available Rooms</h1>
-
-      <div class="row" *ngIf="rooms">
+      <div *ngIf="rooms && rooms.length > 0" class="row">
         <div class="col-12">
           <div class="table-responsive">
             <table class="table">
+
               <tbody>
               <tr *ngFor="let room of rooms">
+
                 <td>
                   <img src="assets/images/intro_room.jpg" alt="Intro Gallery Room Sample Pictures">
                 </td>
                 <td>
-                  <strong>Room #: {{room.roomNumber}}</strong><br/>
-                  <strong>Price: ${{room.price}}</strong>
+                  <div style="flex: 2; padding-left: 20px;">
+                    <p style="margin: 0; font-weight: bold;">Room #: {{ room.roomNumber }}</p>
+                    <p style="margin: 5px 0; font-weight: bold;">${{ room.price }}</p>
+                    <p style="margin: 5px 0; font-weight: bold;">CA${{ room.price }}</p>
+                    <p style="margin: 5px 0; font-weight: bold; ">€{{ room.price }}</p>
+                  </div>
                 </td>
                 <td>
-                  <button type="submit" class="btn btn-primary" (click)="reserveRoom(room.id)">Reserve</button>
+                  <button class="btn btn-primary" (click)="reserveRoom(room.id)">Reserve</button>
                 </td>
               </tr>
               </tbody>
@@ -100,8 +104,11 @@
           </div>
         </div>
       </div>
+      <div *ngIf="rooms && rooms.length === 0">
+        <p>No available rooms for the selected dates.</p>
+      </div>
 
-      <!-- Add Welcome Messages Block Here -->
+      <!-- Add Welcome Messages Block Here
       <h2>Welcome Messages</h2>
 
       <div *ngIf="singularMessage">
@@ -135,9 +142,9 @@
             </table>
           </div>
         </div>
-      </div>
+      </div> -->
     </article>
-  </div><!-- welcome -->
+  </div>  <!-- welcome -->
   <div class="scene" id="hotelinfo">
     <article class="heading">
       <h1>Essential Info</h1>

@@ -1,8 +1,25 @@
 {
-  "/api": {
+  "/room/*": {
     "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+
+    "/api/*": {
+      "target": "http://localhost:8080",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+
+    "architect": {
+      "serve": {
+        "options": {
+          "proxyConfig": "src/proxy.conf.json"
+        }
+      }
+    }
+
   }
-}
+

@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
   messagesArray: string[] = []; //Message Array
 
   roomsearch!: FormGroup; // Add FormGroup for the search form
-  rooms: any[] = []; // Placeholder for room data
+  rooms: Room[] = []; // Placeholder for room data
 
   constructor(private http: HttpClient) {}
 
@@ -77,15 +77,40 @@ export class AppComponent implements OnInit {
 
   // Method to handle form submission
   onSubmit(searchForm: FormGroup): void {
-    const formValues = searchForm.value;
-    console.log('Form submitted:', formValues);
+    const formValues: Roomsearch = searchForm.value;
+    //console.log('Form submitted:', formValues);
+    const url = `/room/reservation/v1?checkin=${formValues.checkin}&checkout=${formValues.checkout}`;
+    console.log('Requesting URL:', url);
     // Add HTTP request to fetch room data if needed
+    this.http.get<any>(url).subscribe(
+      (data) => {
+        this.rooms = data.content;
+        console.log('Available rooms:', this.rooms);
+      },
+      (error) => {
+        console.error('Error fetching rooms:', error);
+      }
+    );
   }
 
   // Placeholder method for reserving a room
   reserveRoom(roomId: string): void {
+    const formValues: Roomsearch = this.roomsearch.value;
     console.log(`Reserving room with ID: ${roomId}`);
     // Add logic to reserve the room (e.g., HTTP request)
+    const reservation = new ReserveRoomRequest(roomId, formValues.checkin, formValues.checkout);
+
+    const url = '/room/reservation/v1';
+    //const url = '/room/reservation/v1?checkin=${formValues.checkin}&checkout=${formValues.checkout}';
+
+    this.http.post(url, reservation).subscribe(
+      (response) => {
+        console.log('Reservation successful:', response);
+      },
+      (error) => {
+        console.error('Error creating reservation:', error);
+      }
+    );
   }
 
 }
