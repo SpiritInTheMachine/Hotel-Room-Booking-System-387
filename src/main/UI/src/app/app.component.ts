@@ -36,6 +36,9 @@ export class ReserveRoomRequest {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
+  timeZones: any = {}; // Time converter
+
   title = 'Landon Hotel App';
   singularMessage: string = ''; //Singular message variable
   messagesArray: string[] = []; //Message Array
@@ -56,6 +59,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.getTimeZones();
+
     // Initialize the roomsearch form
     this.roomsearch = new FormGroup({
       checkin: new FormControl(''),
@@ -73,6 +79,18 @@ export class AppComponent implements OnInit {
           console.error('Error acquiring local message: ', error)
         }
       );
+  }
+
+  // Time zone conversion method
+  getTimeZones(): void {
+    this.http.get('api/timezones').subscribe(
+      (data) => {
+        this.timeZones = data;
+      },
+      (error) => {
+        console.error('Error fetching time zones:', error);
+      }
+    )
   }
 
   // Method to handle form submission
