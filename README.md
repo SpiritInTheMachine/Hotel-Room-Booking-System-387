@@ -1,29 +1,71 @@
-<strong> **DO NOT DISTRIBUTE OR PUBLICLY POST SOLUTIONS TO THESE LABS. MAKE ALL FORKS OF THIS REPOSITORY WITH SOLUTION CODE PRIVATE. PLEASE REFER TO THE STUDENT CODE OF CONDUCT AND ETHICAL EXPECTATIONS FOR COLLEGE OF INFORMATION TECHNOLOGY STUDENTS FOR SPECIFICS. ** </strong>
+# **Landon Hotel Booking System**
 
-# WESTERN GOVERNORS UNIVERSITY 
-## D387 – ADVANCED JAVA
-Welcome to Advanced Java! This is an opportunity for students to write multithreaded object-oriented code using Java frameworks and determine how to deploy software applications using cloud services.
+## **Project Overview**
+The **Landon Hotel Booking System** is a full-stack web application designed to facilitate hotel reservations, room availability checks, and real-time presentation scheduling across different time zones. The system supports multi-language localization and leverages multi-threaded processing for efficient language translation and scheduling. It is containerized with Docker and deployed to the cloud for scalability and ease of deployment.
 
-FOR SPECIFIC TASK INSTRUCTIONS AND REQUIREMENTS FOR THIS ASSESSMENT, PLEASE REFER TO THE COURSE PAGE.
-## BASIC INSTRUCTIONS
-For this assessment, you will modify a Spring application with a Java back end and an Angular front end to include multithreaded language translation, a message at different time zones, and currency exchange. Then, build a Docker image of the current multithreaded Spring application and containerize it using the supporting documents provided in this task.
+## **Key Features**
+- **Room Booking & Availability** – Users can view available rooms and make reservations.
+- **Time Zone Conversion** – Live presentation times are displayed in Eastern (ET), Mountain (MT), and Coordinated Universal Time (UTC).
+- **Internationalization Support** – Multi-threaded processing enables language translation (English & French).
+- **RESTful API Integration** – Backend APIs handle room reservations, messages, and time zone conversions.
+- **Containerized Deployment** – Packaged with Docker and deployed to Azure for cloud hosting.
 
+## **Technologies Used**
+### **Frontend:**
+- Angular (TypeScript)
+- HTML, CSS
+- Bootstrap for responsive design
 
-## SUPPLEMENTAL RESOURCES 
-1.	How to clone a project to IntelliJ using Git?
+### **Backend:**
+- Spring Boot (Java)
+- REST API for business logic
+- Multi-threading for processing efficiency
 
-> Ensure that you have Git installed on your system and that IntelliJ is installed using [Toolbox](https://www.jetbrains.com/toolbox-app/). Make sure that you are using version 2022.3.2. Once this has been confirmed, click the clone button and use the 'IntelliJ IDEA (HTTPS)' button. This will open IntelliJ with a prompt to clone the proejct. Save it in a safe location for the directory and press clone. IntelliJ will prompt you for your credentials. Enter in your WGU Credentials and the project will be cloned onto your local machine.  
+### **Database:**
+- MySQL for storing reservation data
 
-2. How to create a branch and start Development?
+### **DevOps & Deployment:**
+- Docker for containerization
+- Azure App Service for cloud deployment
+- GitLab for version control
 
-- GitLab method
-> Press the '+' button located near your branch name. In the dropdown list, press the 'New branch' button. This will allow you to create a name for your branch. Once the branch has been named, you can select 'Create Branch' to push the branch to your repository.
+## **Setup & Installation**
+### **Prerequisites:**
+- Install **Node.js** and **Angular CLI** for frontend setup
+- Install **Java 17** and **Maven** for backend setup
+- Install **Docker Desktop** for containerization
 
-- IntelliJ method
-> In IntelliJ, Go to the 'Git' button on the top toolbar. Select the new branch option and create a name for the branch. Make sure checkout branch is selected and press create. You can now add a commit message and push the new branch to the local repo.
+### **Steps to Run Locally:**
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd landon-hotel-booking
+   ```
 
-## SUPPORT
-If you need additional support, please navigate to the course page and reach out to your course instructor.
-## FUTURE USE
-Take this opportunity to create or add to a simple resume portfolio to highlight and showcase your work for future use in career search, experience, and education!
+2. **Run Backend**
+   ```bash
+   cd backend
+   mvn clean package
+   java -jar target/D387_sample_code-0.0.2-SNAPSHOT.jar
+   ```
 
+3. **Run Frontend**
+   ```bash
+   cd frontend
+   npm install
+   ng serve --open
+   ```
+
+4. **Run with Docker**
+   ```bash
+   docker build -t landon-hotel-app .
+   docker run -d -p 8080:8080 --name D387_sample_container landon-hotel-app
+   ```
+
+## **API Endpoints**
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/messages` | GET | Fetches localized messages in English & French |
+| `/room/reservation/v1` | GET | Retrieves available rooms based on check-in & check-out dates |
+| `/api/timezones` | GET | Fetches live presentation times in ET, MT, and UTC |
+| `/room/reservation/v1` | POST | Reserves a selected room |
